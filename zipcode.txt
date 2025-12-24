@@ -1,0 +1,837 @@
+01001|Agawam
+01002|Amherst
+01003|Amherst
+01004|Amherst
+01005|Barre
+01007|Belchertown
+01008|Blandford
+01009|Bondsville
+01010|Brimfield
+01011|Chester
+01012|Chesterfield
+01013|Chicopee
+01014|Chicopee
+01020|Chicopee
+01021|Chicopee
+01022|Chicopee
+01026|Cummington
+01027|Easthampton
+01028|East Longmeadow
+01029|East Otis
+01030|Feeding Hills
+01031|Gilbertville
+01032|Goshen
+01033|Granby
+01034|Granville
+01035|Hadley
+01036|Hampden
+01037|Hardwick
+01038|Hatfield
+01039|Haydenville
+01040|Holyoke
+01041|Holyoke
+01050|Huntington
+01053|Leeds
+01054|Leverett
+01056|Ludlow
+01057|Monson
+01059|North Amherst
+01060|Northampton
+01061|Northampton
+01062|Northampton
+01063|Northampton
+01066|North Hatfield
+01068|Oakham
+01069|Palmer
+01070|Plainfield
+01071|Russell
+01072|Shutesbury
+01073|Southampton
+01074|South Barre
+01075|South Hadley
+01077|Southwick
+01079|Thorndike
+01080|Three Rivers
+01081|Warren
+01082|Ware
+01083|West Brookfield
+01084|West Chesterfield
+01085|Westfield
+01086|Westfield
+01088|West Hatfield
+01089|West Springfield
+01090|West Springfield
+01092|West Warren
+01093|Whately
+01094|Wheelwright
+01095|Wilbraham
+01096|Williamsburg
+01097|Woronoco
+01098|Worthington
+01101|Springfield
+01102|Springfield
+01103|Springfield
+01104|Springfield
+01105|Springfield
+01106|Longmeadow
+01107|Springfield
+01108|Springfield
+01109|Springfield
+01111|Springfield
+01115|Springfield
+01116|East Longmeadow
+01118|Springfield
+01119|Springfield
+01128|Springfield
+01129|Springfield
+01138|Springfield
+01139|Springfield
+01144|Springfield
+01151|Indian Orchard
+01152|Springfield
+01199|Springfield
+01201|Pittsfield
+01202|Pittsfield
+01203|Pittsfield
+01220|Adams
+01222|Ashley Falls
+01223|Becket
+01224|Berkshire
+01225|Cheshire
+01226|Dalton
+01227|Dalton
+01229|Glendale
+01230|Great Barrington
+01235|Hinsdale
+01236|Housatonic
+01237|Lanesborough
+01238|Lee
+01240|Lenox
+01242|Lenox Dale
+01243|Middlefield
+01244|Mill River
+01245|Monterey
+01247|North Adams
+01253|Otis
+01254|Richmond
+01255|Sandisfield
+01256|Savoy
+01257|Sheffield
+01258|South Egremont
+01259|Southfield
+01260|Stockbridge
+01262|Stockbridge
+01263|Tyringham
+01264|West Stockbridge
+01266|Williamstown
+01267|Williamstown
+01270|Windsor
+01301|Greenfield
+01302|Greenfield
+01330|Ashfield
+01331|Athol
+01337|Bernardston
+01338|Buckland
+01339|Charlemont
+01340|Colrain
+01341|Conway
+01342|Deerfield
+01343|Drury
+01344|Erving
+01346|Gill
+01347|Hawley
+01349|Heath
+01350|Lake Pleasant
+01351|Leyden
+01354|Millers Falls
+01355|Monroe Bridge
+01360|Montague
+01364|New Salem
+01366|Northfield
+01367|Orange
+01368|Petersham
+01370|Shelburne Falls
+01373|South Deerfield
+01375|Sunderland
+01376|Turners Falls
+01378|Warwick
+01379|Wendell
+01380|Wendell Depot
+01420|Fitchburg
+01430|Ashburnham
+01431|Ashby
+01432|Ayer
+01434|Ayer
+01436|Baldwinville
+01438|East Templeton
+01440|Gardner
+01441|Gardner
+01450|Groton
+01451|Harvard
+01452|Hubbardston
+01453|Leominster
+01462|Lunenburg
+01463|Pepperell
+01464|Shirley
+01467|Still River
+01468|Templeton
+01469|Townsend
+01470|West Groton
+01471|Groton
+01472|Westminster
+01473|Westminster
+01474|West Townsend
+01475|Winchendon
+01477|Devens
+01501|Auburn
+01503|Berlin
+01504|Blackstone
+01505|Boylston
+01506|Brookfield
+01507|Charlton
+01508|Charlton City
+01509|Cherry Valley
+01510|Clinton
+01515|East Brookfield
+01516|Douglas
+01517|Fiskdale
+01518|Gilbertville
+01519|Grafton
+01520|Holden
+01521|Holland
+01522|Jefferson
+01523|Lancaster
+01524|Leicester
+01525|Linwood
+01526|Manchaug
+01527|Millbury
+01529|Millville
+01531|New Braintree
+01532|Northborough
+01534|Northbridge
+01535|North Brookfield
+01536|North Grafton
+01537|North Oxford
+01538|North Uxbridge
+01540|Oxford
+01541|Paxton
+01542|Petersham
+01543|Princeton
+01545|Shrewsbury
+01546|Shrewsbury
+01550|Southbridge
+01560|South Grafton
+01561|South Lancaster
+01562|Spencer
+01564|Sterling
+01566|Sturbridge
+01568|Upton
+01569|Uxbridge
+01570|Webster
+01571|Dudley
+01581|Westborough
+01582|Shrewsbury
+01583|West Boylston
+01585|West Brookfield
+01586|West Millbury
+01588|Whitinsville
+01590|Sutton
+01601|Worcester
+01602|Worcester
+01603|Worcester
+01604|Worcester
+01605|Worcester
+01606|Worcester
+01607|Worcester
+01608|Worcester
+01609|Worcester
+01610|Worcester
+01611|Worcester
+01612|Princeton
+01613|Worcester
+01614|Worcester
+01615|Worcester
+01653|Worcester
+01655|Worcester
+01701|Framingham
+01702|Framingham
+01703|Framingham
+01704|Framingham
+01705|Framingham
+01718|Acton
+01719|Boxborough
+01720|Acton
+01721|Ashland
+01730|Bedford
+01731|Hanscom AFB
+01740|Bolton
+01741|Carlisle
+01742|Concord
+01745|Fayville
+01746|Holliston
+01747|Hopedale
+01748|Hopkinton
+01749|Hudson
+01752|Marlborough
+01754|Maynard
+01756|Mendon
+01757|Milford
+01760|Natick
+01770|Sherborn
+01772|Southborough
+01773|Lincoln
+01775|Stow
+01776|Sudbury
+01778|Wayland
+01784|Westborough
+01801|Woburn
+01803|Burlington
+01805|Woburn
+01807|Burlington
+01808|Burlington
+01810|Andover
+01812|Andover
+01813|Andover
+01815|Andover
+01821|Billerica
+01822|Billerica
+01824|Chelmsford
+01826|Dracut
+01827|Dunstable
+01830|Haverhill
+01831|Haverhill
+01832|Haverhill
+01833|Georgetown
+01834|Groveland
+01835|Haverhill
+01840|Lawrence
+01841|Lawrence
+01842|Lawrence
+01843|Lawrence
+01844|Methuen
+01845|North Andover
+01850|Lowell
+01851|Lowell
+01852|Lowell
+01853|Lowell
+01854|Lowell
+01860|Merrimac
+01862|North Chelmsford
+01863|Tyngsboro
+01864|North Reading
+01865|Pinehurst
+01866|Lowell
+01867|Reading
+01876|Tewksbury
+01879|Tyngsboro
+01880|Wakefield
+01885|Westford
+01886|Westford
+01887|Wilmington
+01888|Woburn
+01889|Lowell
+01890|Winchester
+01899|Lawrence
+01901|Lynn
+01902|Lynn
+01903|Lynn
+01904|Lynn
+01905|Lynn
+01906|Saugus
+01907|Swampscott
+01908|Nahant
+01910|Lynn
+01913|Amesbury
+01915|Beverly
+01921|Boxford
+01922|Byfield
+01923|Danvers
+01929|Essex
+01930|Gloucester
+01931|Gloucester
+01936|Hamilton
+01937|Hathorne
+01938|Ipswich
+01940|Lynnfield
+01944|Manchester
+01945|Marblehead
+01949|Middleton
+01950|Newburyport
+01951|Newbury
+01952|Salisbury
+01960|Peabody
+01961|Peabody
+01965|Prides Crossing
+01966|Rockport
+01969|Rowley
+01970|Salem
+01971|Salem
+01982|South Hamilton
+01983|Topsfield
+01984|Wenham
+01985|West Newbury
+02018|Accord
+02019|Bellingham
+02020|Brant Rock
+02021|Canton
+02025|Cohasset
+02026|Dedham
+02027|Dedham
+02030|Dover
+02032|East Walpole
+02035|Foxboro
+02038|Franklin
+02040|Greenbush
+02041|Green Harbor
+02043|Hingham
+02044|Hingham
+02045|Hull
+02047|Humarock
+02048|Mansfield
+02050|Marshfield
+02051|Marshfield Hills
+02052|Medfield
+02053|Medway
+02054|Millis
+02055|Minot
+02056|Norfolk
+02059|North Marshfield
+02060|North Scituate
+02061|Norwell
+02062|Norwood
+02065|Ocean Bluff
+02066|Scituate
+02067|Sharon
+02070|Sheldonville
+02071|South Walpole
+02072|Stoughton
+02081|Walpole
+02090|Westwood
+02093|Wrentham
+02108|Boston
+02109|Boston
+02110|Boston
+02111|Boston
+02112|Boston
+02113|Boston
+02114|Boston
+02115|Boston
+02116|Boston
+02117|Boston
+02118|Boston
+02119|Boston
+02120|Boston
+02121|Boston
+02122|Dorchester
+02123|Boston
+02124|Dorchester
+02125|Dorchester
+02126|Mattapan
+02127|South Boston
+02128|East Boston
+02129|Charlestown
+02130|Jamaica Plain
+02131|Roslindale
+02132|West Roxbury
+02133|Boston
+02134|Allston
+02135|Brighton
+02136|Hyde Park
+02137|Boston
+02138|Cambridge
+02139|Cambridge
+02140|Cambridge
+02141|Cambridge
+02142|Cambridge
+02143|Somerville
+02144|Somerville
+02145|Somerville
+02148|Malden
+02149|Everett
+02150|Chelsea
+02151|Revere
+02152|Winthrop
+02153|Boston
+02155|Medford
+02156|West Medford
+02163|Boston
+02169|Quincy
+02170|Quincy
+02171|Quincy
+02176|Melrose
+02180|Stoneham
+02184|Braintree
+02185|Braintree
+02186|Milton
+02187|Quincy
+02188|Quincy
+02189|Quincy
+02190|South Weymouth
+02191|North Weymouth
+02196|Boston
+02199|Boston
+02201|Boston
+02203|Boston
+02204|Boston
+02205|Boston
+02206|Boston
+02210|Boston
+02211|Boston
+02212|Boston
+02215|Boston
+02217|Boston
+02222|Boston
+02228|Boston
+02238|Cambridge
+02241|Boston
+02266|Boston
+02269|Braintree
+02283|Boston
+02284|Boston
+02293|Boston
+02297|Boston
+02298|Boston
+02420|Lexington
+02421|Lexington
+02445|Brookline
+02446|Brookline
+02447|Brookline
+02451|Waltham
+02452|Waltham
+02453|Waltham
+02454|Waltham
+02455|Waltham
+02456|Newtonville
+02458|Newton
+02459|Newton
+02460|Newtonville
+02461|Newton Highlands
+02462|Newton Lower Falls
+02464|Newton Upper Falls
+02465|West Newton
+02466|Auburndale
+02467|Chestnut Hill
+02468|Waban
+02471|Newton
+02472|Watertown
+02474|Arlington
+02475|Arlington
+02476|Arlington
+02477|Belmont
+02478|Belmont
+02479|Belmont
+02481|Wellesley Hills
+02482|Wellesley
+02492|Needham
+02493|Lincoln
+02494|Needham Heights
+02495|Waban
+02532|Buzzards Bay
+02534|Cataumet
+02535|Chilmark
+02536|East Falmouth
+02537|East Sandwich
+02538|East Wareham
+02539|Edgartown
+02540|Falmouth
+02541|Falmouth
+02542|Otis Air National Guard
+02543|Woods Hole
+02552|Gay Head
+02553|Monument Beach
+02554|Nantucket
+02556|North Falmouth
+02557|Oak Bluffs
+02558|Onset
+02559|Pocasset
+02561|Sagamore Beach
+02562|Sandwich
+02563|Sandwich
+02564|Siasconset
+02565|Silver Beach
+02568|Vineyard Haven
+02571|Wareham
+02573|West Chop
+02574|West Falmouth
+02575|West Tisbury
+02576|West Wareham
+02584|Nantucket
+02601|Hyannis
+02630|Barnstable
+02631|Brewster
+02632|Centerville
+02633|Chatham
+02634|West Barnstable
+02635|Cotuit
+02636|South Chatham
+02637|Cummaquid
+02638|Dennis
+02639|Dennis Port
+02641|East Dennis
+02642|Eastham
+02643|East Orleans
+02644|Forestdale
+02645|Harwich
+02646|Harwich Port
+02647|Hyannis Port
+02648|Marstons Mills
+02649|Mashpee
+02650|North Chatham
+02651|North Eastham
+02652|North Truro
+02653|Orleans
+02655|Osterville
+02657|Provincetown
+02659|South Chatham
+02660|South Dennis
+02661|South Harwich
+02662|South Orleans
+02663|Truro
+02664|South Yarmouth
+02666|Wellfleet
+02667|Wellfleet
+02668|West Dennis
+02669|West Harwich
+02670|West Hyannisport
+02671|West Yarmouth
+02672|Yarmouth Port
+02673|Yarmouth
+02675|Yarmouth Port
+02702|Assonet
+02703|Attleboro
+02712|Berkley
+02713|Cuttyhunk
+02714|Dartmouth
+02715|Dighton
+02717|East Freetown
+02718|East Taunton
+02719|Fairhaven
+02720|Fall River
+02721|Fall River
+02722|Fall River
+02723|Fall River
+02724|Fall River
+02725|Somerset
+02726|Somerset
+02738|Mattapoisett
+02739|Middleboro
+02740|New Bedford
+02741|New Bedford
+02742|New Bedford
+02743|Acushnet
+02744|New Bedford
+02745|New Bedford
+02746|New Bedford
+02747|North Dartmouth
+02748|South Dartmouth
+02760|North Attleboro
+02761|North Attleboro
+02762|North Attleboro
+02763|North Attleboro
+02764|North Attleboro
+02766|Norton
+02767|Raynham
+02768|Raynham Center
+02769|Rehoboth
+02770|Rochester
+02771|Seekonk
+02777|Swansea
+02779|Berkley
+02780|Taunton
+02783|Taunton
+02790|Westport
+02791|Westport Point
+05501|Andover
+05544|North Reading
+03031|Amherst
+03032|Auburn
+03033|Brookline
+03034|Candia
+03036|Chester
+03037|Deerfield
+03038|Derry
+03040|East Candia
+03041|East Derry
+03042|Epping
+03043|Francestown
+03044|Fremont
+03045|Goffstown
+03046|Dunbarton
+03047|Greenfield
+03048|Greenville
+03049|Hollis
+03051|Hudson
+03052|Litchfield
+03053|Londonderry
+03054|Merrimack
+03055|Milford
+03057|Mont Vernon
+03060|Nashua
+03061|Nashua
+03062|Nashua
+03063|Nashua
+03064|Nashua
+03070|New Boston
+03071|New Ipswich
+03076|Pelham
+03077|Raymond
+03079|Salem
+03082|Lyndeborough
+03084|Temple
+03086|Wilton
+03087|Windham
+03101|Manchester
+03102|Manchester
+03103|Manchester
+03104|Manchester
+03106|Hooksett
+03109|Manchester
+03110|Bedford
+03215|Allenstown
+03216|Andover
+03217|Ashland
+03218|Barnstead
+03220|Belmont
+03221|Bradford
+03222|Bristol
+03223|Campton
+03224|Canterbury
+03225|Center Barnstead
+03226|Center Harbor
+03227|Chichester
+03229|Contoocook
+03230|Croydon
+03231|Danbury
+03233|Deering
+03234|Dunbarton
+03235|Epsom
+03237|Franconia
+03238|Gilmanton
+03240|Gilmanton Iron Works
+03241|Gilford
+03242|Goshen
+03244|Groton
+03245|Hebron
+03249|Holderness
+03251|Holderness
+03253|Hill
+03254|Hillsborough
+03255|Holderness
+03256|Intervale
+03257|Laconia
+03258|Landaff
+03259|Lempster
+03260|Lincoln
+03261|Lisbon
+03262|Littleton
+03263|Loon Mountain
+03301|Concord
+03302|Concord
+03303|Concord
+03304|Bow
+03305|Concord
+03307|Loudon
+03431|Keene
+03440|New Ipswich
+03444|Stoddard
+03445|Washington
+03561|Littleton
+03570|Lancaster
+03572|Colebrook
+03841|Hampstead
+03826|East Hampstead
+03870|Rye
+03871|Rye Beach
+
+02801|Adamsville  
+02802|Albion  
+02804|Ashaway  
+02806|Barrington  
+02807|Block Island  
+02808|Bradford  
+02809|Bristol  
+02812|Carolina  
+02813|Charlestown  
+02814|Chepachet  
+02815|Clayville  
+02816|Coventry  
+02817|West Greenwich  
+02818|East Greenwich  
+02822|Exeter  
+02823|Fiskeville  
+02824|Forestdale  
+02825|Foster  
+02826|Glendale  
+02827|Greene  
+02828|Greenville  
+02829|Harmony  
+02830|Harrisville  
+02831|Hope  
+02832|Hope Valley  
+02833|Hopkinton  
+02835|Jamestown  
+02836|Kenyon  
+02837|Little Compton  
+02838|Manville  
+02839|Mapleville  
+02840|Newport  
+02841|Newport  
+02842|Middletown  
+02852|North Kingstown  
+02857|North Scituate  
+02858|Oakland  
+02859|Pascoag  
+02860|Pawtucket  
+02861|Pawtucket  
+02862|Pawtucket  
+02863|Central Falls  
+02864|Cumberland  
+02865|Lincoln  
+02871|Portsmouth  
+02872|Prudence Island  
+02874|Saunderstown  
+02875|Shannock  
+02876|Slatersville  
+02877|Slocum  
+02878|Tiverton  
+02879|Wakefield  
+02881|Kingston  
+02882|Narragansett / Point Judith  
+02885|Warren  
+02886|Warwick  
+02887|Warwick  
+02888|Warwick  
+02889|Warwick  
+02891|Westerly  
+02892|West Kingston  
+02893|West Warwick  
+02894|Wood River Junction  
+02895|Woonsocket  
+02896|North Smithfield  
+02898|Wyoming  
+02901|Providence  
+02902|Providence  
+02903|Providence  
+02904|Providence  
+02905|Providence  
+02906|Providence  
+02907|Providence  
+02908|Providence  
+02909|Providence  
+02910|Cranston  
+02911|North Providence  
+02912|Providence  
+02914|Providence  
+02915|Riverside  
+02916|Rumford  
+02917|Smithfield  
+02918|Providence  
+02919|Johnston  
+02920|Cranston  
+02921|Cranston  
+02301|Brockton|MA
+02360|Plymouth|MA
+02365|Plympton|MA
+02889|Warwick|RI
+02904|Providence|RI
+02375|South Easton
