@@ -1,35 +1,38 @@
-name: Build Windows EXE
+name: Build Linux App
 
 on:
   push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y python3 python3-pip python3-tk xvfb
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-        pip install pyinstaller
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pyinstaller pillow requests
 
-    - name: Build EXE
-      run: |
-        pyinstaller --onefile --add-data "zipcode.txt;." yourscript.py
+      - name: Build with PyInstaller (headless-safe)
+        run: |
+          xvfb-run pyinstaller \
+            --onefile \
+            --windowed \
+            --add-data "zipcode.txt:." \
+            property_search.py
 
-    - name: Upload EXE artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: property-viewer-exe
-        path: dist/*
-       
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: property_search_linux
+          path: dist/property_search
+
