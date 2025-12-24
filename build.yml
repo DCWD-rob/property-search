@@ -24,10 +24,10 @@ jobs:
 
     - name: Build EXE
       run: |
-        pyinstaller --onefile --add-data "zipcode.txt;." yourscript.py
+        pyinstaller --onefile --add-data "zipcode.txt;." property_search.py
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: property-viewer-exe
         path: dist/*
