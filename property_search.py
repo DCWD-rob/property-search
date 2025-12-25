@@ -299,59 +299,79 @@ def open_property_search_window():
     # ---------- Load Property File ----------
     def load_file():
         global headers, all_rows
+
         path = filedialog.askopenfilename(
             title="Select property file",
-            filetypes=[("CSV / TXT", "*.csv *.txt")]
+            filetypes=[("CSV / TXT", "*.csv *.txt"), ("All files", "*.*")]
         )
         if not path:
             return
 
-        with open(path, "r", encoding="utf-8-sig", errors="replace", newline="") as f:
-            sample = f.read(4096)
-            f.seek(0)
-
         try:
-            dialect = csv.Sniffer().sniff(sample, delimiters="|,\t")
-        except csv.Error:
-            dialect = csv.excel
-            dialect.delimiter = "|"
-        reader = csv.reader(f, dialect)
-        rows = [row for row in csv.reader if any(cell.strip() for cell in row)]
+            with open(path, "r", encoding="utf-8-sig", errors="replace", newline="") as f:
+                sample = f.read(4096)
+                f.seek(0)
 
-        if not rows or len(rows) < 2:
-            messagebox.showerror(
-            "File Error",
-            "The selected file contains no readable data.\n"
-            "Check delimiter and encoding."
-         )
-            return
+                try:
+                    dialect = csv.Sniffer().sniff(sample, delimiters="|,\t")
+                except csv.Error:
+                    dialect = csv.excel
+                    dialect.delimiter = "|"
 
+                reader = csv.reader(f, dialect)
+                rows = [row for row in reader if any(cell.strip() for cell in row)]
 
+            if not rows or len(rows) < 2:
+                messagebox.showerror(
+                    "File Error",
+                    "The selected file contains no readable rows.\n"
+                    "Check delimiter and encoding."
+                )
+                return
 
-        headers[:] = [h.strip() for h in rows[0]]
-        all_rows[:] = rows[1:]
+            headers[:] = [h.strip() for h in rows[0]]
+            all_rows[:] = rows[1:]
 
-        # Map ZIP to Town
-        zip_idx = headers.index("ZIP") if "ZIP" in headers else None
-        town_idx = headers.index("TOWN_NUM") if "TOWN_NUM" in headers else None
-        if zip_idx is not None and town_idx is not None:
-            for r in all_rows:
-                if r[zip_idx] in zip_lookup:
-                    r[town_idx] = zip_lookup[r[zip_idx]]
+            # Validate required columns
+            required = {"LIST_NO", "ZIP", "COUNTY"}
+            missing = required - set(headers)
+            if missing:
+                messagebox.showerror(
+                    "Invalid File",
+                    f"Missing required columns:\n{', '.join(missing)}"
+                )
+                return
 
-        # Populate county dropdown
-        if "COUNTY" in headers:
-            counties = sorted(set(r[headers.index("COUNTY")] for r in all_rows))
-            county_dropdown["values"] = [""] + counties
-            county_dropdown.set("")
+            # ZIP → Town mapping
+            zip_idx = headers.index("ZIP")
+            town_idx = headers.index("TOWN_NUM") if "TOWN_NUM" in headers else None
+            if town_idx is not None:
+                for r in all_rows:
+                    if r[zip_idx] in zip_lookup:
+                        r[town_idx] = zip_lookup[r[zip_idx]]
 
-        # Populate town dropdown
-        if town_idx is not None:
-            towns = sorted(set(r[town_idx] for r in all_rows if r[town_idx]))
-            town_dropdown["values"] = [""] + towns
-            town_dropdown.set("")
+            # Populate dropdowns
+            if "COUNTY" in headers:
+                counties = sorted({r[headers.index("COUNTY")] for r in all_rows if r[headers.index("COUNTY")]})
+                county_dropdown["values"] = [""] + counties
+                county_dropdown.set("")
 
-        refresh_table(all_rows)
+            if town_idx is not None:
+                towns = sorted({r[town_idx] for r in all_rows if r[town_idx]})
+                town_dropdown["values"] = [""] + towns
+                town_dropdown.set("")
+
+            refresh_table(all_rows)
+
+            messagebox.showinfo(
+                "Loaded",
+                f"Loaded {len(all_rows)} rows successfully."
+            )
+
+        except Exception as e:
+            messagebox.showerror("Load Error", str(e))
+
+            refresh_table(all_rows)
 
     root.mainloop()
 
