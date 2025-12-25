@@ -216,14 +216,16 @@ def open_property_search_window():
 
         placeholder = ImageTk.PhotoImage(Image.new("RGB", THUMB_SIZE, "lightgray"))
 
-        for r in rows:
+        for i, r in enumerate(rows):
             mls = str(r[headers.index("LIST_NO")]).strip() if "LIST_NO" in headers else ""
-            values = [r[i] for i, h in enumerate(headers) if h != "PHOTO"]
+            values = [r[j] for j, h in enumerate(headers) if h != "PHOTO"]
             item_id = tree.insert("", "end", image=placeholder, values=values)
+            
             if mls:
-                fetch_thumbnail_async(mls, tree, item_id)
+                # Schedule thumbnail fetch staggered by a small delay to load top-to-bottom
+                tree.after(i * 50, lambda m=mls, item=item_id: fetch_thumbnail_async(m, tree, item))
 
-    # ---------- Row Details ----------
+        # ---------- Row Details ----------
     def on_row_selected(event):
         sel = tree.focus()
         if not sel:
