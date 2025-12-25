@@ -4,6 +4,7 @@ from tkinter.scrolledtext import ScrolledText
 import csv
 import os
 import re
+from more_itertools import sample
 import requests
 from PIL import Image, ImageTk
 from io import BytesIO
@@ -305,8 +306,27 @@ def open_property_search_window():
         if not path:
             return
 
-        with open(path, encoding="utf-8", errors="replace") as f:
-            rows = list(csv.reader(f, delimiter="|"))
+        with open(path, "r", encoding="utf-8-sig", errors="replace", newline="") as f:
+            sample = f.read(4096)
+            f.seek(0)
+
+        try:
+            dialect = csv.Sniffer().sniff(sample, delimiters="|,\t")
+        except csv.Error:
+            dialect = csv.excel
+            dialect.delimiter = "|"
+        reader = csv.reader(f, dialect)
+        rows = [row for row in csv.reader if any(cell.strip() for cell in row)]
+
+        if not rows or len(rows) < 2:
+            messagebox.showerror(
+            "File Error",
+            "The selected file contains no readable data.\n"
+            "Check delimiter and encoding."
+         )
+            return
+
+
 
         headers[:] = [h.strip() for h in rows[0]]
         all_rows[:] = rows[1:]
