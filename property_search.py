@@ -9,6 +9,7 @@ from PIL import Image, ImageTk
 from io import BytesIO
 from concurrent.futures import ThreadPoolExecutor
 
+
 # ---------- Globals ----------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 all_rows = []
@@ -215,7 +216,8 @@ def open_property_search_window():
 
         for i, r in enumerate(rows):
             mls = str(r[headers.index("LIST_NO")]).strip() if "LIST_NO" in headers else ""
-            values = [r[j] for j, h in enumerate(headers) if h != "PHOTO"]
+            values = [r[j] if j < len(r) else "" for j, h in enumerate(headers) if h != "PHOTO"]
+
             item_id = tree.insert("", "end", image=placeholder, values=values)
             if mls:
                 # Load top-down with a slight delay to keep UI responsive
@@ -335,4 +337,3 @@ def open_property_search_window():
 
 # ---------- Run App ----------
 open_property_search_window()
-
