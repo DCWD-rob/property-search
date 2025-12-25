@@ -15,6 +15,8 @@ import sys
 # Handles PyInstaller temporary path
 BASE_DIR = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
 
+zip_file_path = os.path.join(BASE_DIR, "zipcode.txt")
+
 all_rows = []
 headers = []
 zip_lookup = {}
