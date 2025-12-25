@@ -10,6 +10,7 @@ from io import BytesIO
 from concurrent.futures import ThreadPoolExecutor
 
 
+
 # ---------- Globals ----------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 all_rows = []
@@ -20,7 +21,7 @@ photo_images = {}
 THUMB_SIZE = (100, 100)
 COL_WIDTH = 250
 MAX_WORKERS = 6
-
+placeholder_image = None
 # Networking
 session = requests.Session()
 thumb_pool = ThreadPoolExecutor(max_workers=MAX_WORKERS)
@@ -107,31 +108,61 @@ def open_property_search_window():
             return
 
         idx = {h: headers.index(h) for h in headers}
+
+        # Pre-calc indices safely
+        bed_idx = idx.get("NO_BEDROOMS")
+        bath_idx = idx.get("NO_BATHS")
+        price_idx = idx.get("LIST_PRICE")
+        sqft_idx = idx.get("SQUARE_FEET")
         remarks_idx = idx.get("REMARKS")
+        county_idx = idx.get("COUNTY")
         town_idx = idx.get("TOWN_NUM")
 
         filtered = []
         for r in all_rows:
             try:
-                if county_var.get() and r[idx["COUNTY"]] != county_var.get():
-                    continue
-                if town_var.get() and town_idx is not None and r[town_idx] != town_var.get():
-                    continue
-                if bed_var.get() and (num(r[idx.get("NO_BEDROOMS")]) or 0) < num(bed_var.get()):
-                    continue
-                if bath_var.get() and (num(r[idx.get("NO_BATHS")]) or 0) < num(bath_var.get()):
-                    continue
-                if price_min.get() and (num(r[idx.get("LIST_PRICE")]) or 0) < num(price_min.get()):
-                    continue
-                if price_max.get() and (num(r[idx.get("LIST_PRICE")]) or 0) > num(price_max.get()):
-                    continue
-                if sq_ft_min.get() and (num(r[idx.get("SQUARE_FEET")]) or 0) < num(sq_ft_min.get()):
-                    continue
+                # COUNTY
+                if county_var.get() and county_idx is not None:
+                    if r[county_idx] != county_var.get():
+                        continue
+
+                # TOWN
+                if town_var.get() and town_idx is not None:
+                    if r[town_idx] != town_var.get():
+                        continue
+
+                # BEDROOMS
+                if bed_var.get() and bed_idx is not None:
+                    if (num(r[bed_idx]) or 0) < num(bed_var.get()):
+                        continue
+
+                # BATHS
+                if bath_var.get() and bath_idx is not None:
+                    if (num(r[bath_idx]) or 0) < num(bath_var.get()):
+                        continue
+
+                # PRICE MIN
+                if price_min.get() and price_idx is not None:
+                    if (num(r[price_idx]) or 0) < num(price_min.get()):
+                        continue
+
+                # PRICE MAX
+                if price_max.get() and price_idx is not None:
+                    if (num(r[price_idx]) or 0) > num(price_max.get()):
+                        continue
+
+                # SQUARE FEET
+                if sq_ft_min.get() and sqft_idx is not None:
+                    if (num(r[sqft_idx]) or 0) < num(sq_ft_min.get()):
+                        continue
+
+                # REMARKS CONTAINS
                 if remarks_var.get() and remarks_idx is not None:
                     if remarks_var.get().lower() not in str(r[remarks_idx]).lower():
                         continue
+
             except Exception as e:
-                print(f"Filter error: {e}")
+                print("Filter error:", e)
                 continue
 
             filtered.append(r)
@@ -212,13 +243,15 @@ def open_property_search_window():
             tree.heading(col, text=col, command=lambda c=col: sort_by_column(c))
             tree.column(col, width=COL_WIDTH, minwidth=150, stretch=True)
 
-        placeholder = ImageTk.PhotoImage(Image.new("RGB", THUMB_SIZE, "lightgray"))
+        global placeholder_image
+        placeholder_image = ImageTk.PhotoImage(Image.new("RGB", THUMB_SIZE, "lightgray"))
+
 
         for i, r in enumerate(rows):
             mls = str(r[headers.index("LIST_NO")]).strip() if "LIST_NO" in headers else ""
             values = [r[j] if j < len(r) else "" for j, h in enumerate(headers) if h != "PHOTO"]
 
-            item_id = tree.insert("", "end", image=placeholder, values=values)
+            item_id = tree.insert("", "end", image=placeholder_image, values=values)
             if mls:
                 # Load top-down with a slight delay to keep UI responsive
                 tree.after(i*50, lambda m=mls, item=item_id: fetch_thumbnail_async_safe(m, tree, item))
