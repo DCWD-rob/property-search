@@ -202,6 +202,7 @@ def open_property_search_window():
         sort_state[col] = not reverse
 
     # ---------- Refresh Table ----------
+    # ---------- Refresh Table ----------
     def refresh_table(rows):
         tree.delete(*tree.get_children())
         visible_cols = [h for h in headers if h != "PHOTO"]
@@ -214,16 +215,22 @@ def open_property_search_window():
             tree.heading(col, text=col, command=lambda c=col: sort_by_column(c))
             tree.column(col, width=COL_WIDTH, minwidth=150, stretch=True)
 
+        # Create one placeholder image for all rows
         placeholder = ImageTk.PhotoImage(Image.new("RGB", THUMB_SIZE, "lightgray"))
 
-        for i, r in enumerate(rows):
+        # Insert rows
+        items_to_fetch = []
+        for r in rows:
             mls = str(r[headers.index("LIST_NO")]).strip() if "LIST_NO" in headers else ""
-            values = [r[j] for j, h in enumerate(headers) if h != "PHOTO"]
+            values = [r[i] for i, h in enumerate(headers) if h != "PHOTO"]
             item_id = tree.insert("", "end", image=placeholder, values=values)
-            
             if mls:
-                # Schedule thumbnail fetch staggered by a small delay to load top-to-bottom
-                tree.after(i * 50, lambda m=mls, item=item_id: fetch_thumbnail_async(m, tree, item))
+                items_to_fetch.append((mls, item_id))
+
+        # Fetch thumbnails **top-to-bottom** with a small delay between each
+        for i, (mls, item_id) in enumerate(items_to_fetch):
+            tree.after(i * 50, lambda m=mls, item=item_id: fetch_thumbnail_async(m, tree, item))
+
 
         # ---------- Row Details ----------
     def on_row_selected(event):
