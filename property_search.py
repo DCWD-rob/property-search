@@ -370,3 +370,4 @@ def open_property_search_window():
 
 # ---------- Run App ----------
 open_property_search_window()
+
