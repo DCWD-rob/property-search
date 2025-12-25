@@ -4,19 +4,13 @@ from tkinter.scrolledtext import ScrolledText
 import csv
 import os
 import re
-from more_itertools import sample
 import requests
 from PIL import Image, ImageTk
 from io import BytesIO
 from concurrent.futures import ThreadPoolExecutor
-import sys
 
 # ---------- Globals ----------
-# Handles PyInstaller temporary path
-BASE_DIR = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
-
-zip_file_path = os.path.join(BASE_DIR, "zipcode.txt")
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 all_rows = []
 headers = []
 zip_lookup = {}
@@ -24,10 +18,11 @@ photo_images = {}
 
 THUMB_SIZE = (100, 100)
 COL_WIDTH = 250
+MAX_WORKERS = 6
 
 # Networking
 session = requests.Session()
-thumb_pool = ThreadPoolExecutor(max_workers=6)
+thumb_pool = ThreadPoolExecutor(max_workers=MAX_WORKERS)
 
 # ---------- Helpers ----------
 def num(v):
@@ -39,20 +34,19 @@ def num(v):
     m = re.search(r"\d+(\.\d+)?", s)
     return float(m.group()) if m else None
 
-def load_zip_lookup():
+def load_zip_lookup(filename):
     zip_lookup.clear()
-    path = os.path.join(BASE_DIR, "zipcode.txt")
     try:
-        with open(path, encoding="utf-8", errors="replace") as f:
+        with open(filename, encoding="utf-8", errors="replace") as f:
             for line in f:
                 parts = line.strip().split("|")
                 if len(parts) >= 2:
                     zip_lookup[parts[0]] = parts[1]
     except FileNotFoundError:
-        messagebox.showerror("Missing File", f"{path} not found.")
+        messagebox.showerror("Missing File", f"{filename} not found.")
 
 def fetch_thumbnail(mls_number, size=THUMB_SIZE):
-    url = f"http://media.mlspin.com/photo.aspx?mls={mls_number}&n=0&w=150&h=150"
+    url = f"http://media.mlspin.com/photo.aspx?mls={mls_number}&n=0&w=300&h=300"
     try:
         r = session.get(url, timeout=5)
         r.raise_for_status()
@@ -62,8 +56,10 @@ def fetch_thumbnail(mls_number, size=THUMB_SIZE):
     except:
         return ImageTk.PhotoImage(Image.new("RGB", size, "gray"))
 
-def fetch_thumbnail_async(mls_number, tree, item_id):
+def fetch_thumbnail_async_safe(mls_number, tree, item_id):
     if mls_number in photo_images:
+        if item_id in tree.get_children():
+            tree.item(item_id, image=photo_images[mls_number])
         return
 
     def worker():
@@ -71,7 +67,6 @@ def fetch_thumbnail_async(mls_number, tree, item_id):
         photo_images[mls_number] = thumb
 
         def apply():
-            # Check if item still exists
             if item_id in tree.get_children():
                 tree.item(item_id, image=thumb)
 
@@ -88,8 +83,8 @@ def open_property_search_window():
     root.title("Property Viewer with Thumbnails")
     root.geometry("1800x800")
 
-    # Load ZIP lookup automatically
-    load_zip_lookup()
+    # Load ZIP lookup
+    load_zip_lookup(os.path.join(BASE_DIR, "zipcode.txt"))
 
     # ---------- Left Filter Panel ----------
     left = tk.Frame(root)
@@ -148,7 +143,7 @@ def open_property_search_window():
         tk.Entry(left, textvariable=var, width=15).pack(anchor="w")
         var.trace_add("write", apply_filters)
 
-    tk.Button(left, text="Load Property File", command=lambda: load_file()).pack(pady=5)
+    tk.Button(left, text="Load File", command=lambda: load_file()).pack(pady=5)
     tk.Label(left, text="Filters", font=("Arial", 11, "bold")).pack(anchor="w", pady=(10, 5))
 
     field("Min Beds", bed_var)
@@ -183,7 +178,7 @@ def open_property_search_window():
     tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
     style = ttk.Style()
-    style.configure("Treeview", font=("Courier", 10), rowheight=THUMB_SIZE[1] + 20)
+    style.configure("Treeview", font=("Courier", 10), rowheight=THUMB_SIZE[1]+20)
 
     # ---------- Sorting ----------
     def sort_by_column(col):
@@ -204,37 +199,29 @@ def open_property_search_window():
         sort_state[col] = not reverse
 
     # ---------- Refresh Table ----------
-    # ---------- Refresh Table ----------
     def refresh_table(rows):
         tree.delete(*tree.get_children())
         visible_cols = [h for h in headers if h != "PHOTO"]
         tree["columns"] = visible_cols
 
         tree.heading("#0", text="Photo")
-        tree.column("#0", width=THUMB_SIZE[0] + 20, anchor="center", stretch=False)
+        tree.column("#0", width=THUMB_SIZE[0]+20, anchor="center", stretch=False)
 
         for col in visible_cols:
             tree.heading(col, text=col, command=lambda c=col: sort_by_column(c))
             tree.column(col, width=COL_WIDTH, minwidth=150, stretch=True)
 
-        # Create one placeholder image for all rows
         placeholder = ImageTk.PhotoImage(Image.new("RGB", THUMB_SIZE, "lightgray"))
 
-        # Insert rows
-        items_to_fetch = []
-        for r in rows:
+        for i, r in enumerate(rows):
             mls = str(r[headers.index("LIST_NO")]).strip() if "LIST_NO" in headers else ""
-            values = [r[i] for i, h in enumerate(headers) if h != "PHOTO"]
+            values = [r[j] for j, h in enumerate(headers) if h != "PHOTO"]
             item_id = tree.insert("", "end", image=placeholder, values=values)
             if mls:
-                items_to_fetch.append((mls, item_id))
+                # Load top-down with a slight delay to keep UI responsive
+                tree.after(i*50, lambda m=mls, item=item_id: fetch_thumbnail_async_safe(m, tree, item))
 
-        # Fetch thumbnails **top-to-bottom** with a small delay between each
-        for i, (mls, item_id) in enumerate(items_to_fetch):
-            tree.after(i * 50, lambda m=mls, item=item_id: fetch_thumbnail_async(m, tree, item))
-
-
-        # ---------- Row Details ----------
+    # ---------- Row Details ----------
     def on_row_selected(event):
         sel = tree.focus()
         if not sel:
@@ -243,149 +230,109 @@ def open_property_search_window():
         if not values:
             return
 
-        # New detail window
+        # Detail window
         detail_win = tk.Toplevel(root)
         detail_win.title("Property Details")
-        detail_win.geometry("1000x800")
+        detail_win.geometry("900x700")
 
-        # Scrollable frame for images
-        img_frame_canvas = tk.Canvas(detail_win)
-        img_frame_canvas.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
-        img_scrollbar = tk.Scrollbar(detail_win, orient="vertical", command=img_frame_canvas.yview)
-        img_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        img_frame_canvas.configure(yscrollcommand=img_scrollbar.set)
-        img_frame = tk.Frame(img_frame_canvas)
-        img_frame_canvas.create_window((0, 0), window=img_frame, anchor="nw")
-
-        # Text details at top
-        text = ScrolledText(detail_win, wrap=tk.WORD, height=12)
+        # Info text
+        text = ScrolledText(detail_win, wrap=tk.WORD, width=100, height=15)
         text.pack(fill=tk.X, expand=False)
         visible_headers = [h for h in headers if h != "PHOTO"]
         for i, h in enumerate(visible_headers):
             text.insert(tk.END, f"{h}: {values[i]}\n")
         text.configure(state="disabled")
 
-        # Load all images for this property (rows can have multiple photos)
+        # ---------- Image Frame ----------
+        canvas_frame = tk.Frame(detail_win)
+        canvas_frame.pack(fill=tk.BOTH, expand=True)
+
+        canvas = tk.Canvas(canvas_frame)
+        scrollbar = tk.Scrollbar(canvas_frame, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas)
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        canvas.create_window((0,0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Load all property images
         mls = str(values[visible_headers.index("LIST_NO")]).strip() if "LIST_NO" in visible_headers else ""
-        images = []
+        if mls:
+            # Try 50 images max (can adjust)
+            for n in range(50):
+                def make_image(n=n):
+                    url = f"http://media.mlspin.com/photo.aspx?mls={mls}&n={n}&w=300&h=300"
+                    try:
+                        r = session.get(url, timeout=5)
+                        r.raise_for_status()
+                        img = Image.open(BytesIO(r.content))
+                        img.thumbnail((200,200))
+                        photo = ImageTk.PhotoImage(img)
 
-        def load_all_images():
-            idx = 0
-            while True:
-                try:
-                    url = f"http://media.mlspin.com/photo.aspx?mls={mls}&n={idx}&w=300&h=300"
-                    r = session.get(url, timeout=5)
-                    r.raise_for_status()
-                    img = Image.open(BytesIO(r.content))
-                    img.thumbnail((300, 300))
-                    photo_img = ImageTk.PhotoImage(img)
-                    images.append(photo_img)
+                        lbl = tk.Label(scrollable_frame, image=photo)
+                        lbl.image = photo  # keep reference
+                        lbl.grid(row=n//4, column=n%4, padx=5, pady=5)
 
-                    # Click to enlarge
-                    def make_click_handler(img=img):
-                        def handler(event):
-                            top = tk.Toplevel(detail_win)
-                            top.title("Image")
-                            tk_img = ImageTk.PhotoImage(img)
-                            lbl = tk.Label(top, image=tk_img)
-                            lbl.image = tk_img
-                            lbl.pack()
-                        return handler
-
-                    lbl = tk.Label(img_frame, image=photo_img, cursor="hand2")
-                    lbl.image = photo_img
-                    lbl.grid(row=idx // 4, column=idx % 4, padx=5, pady=5)
-                    lbl.bind("<Button-1>", make_click_handler(img))
-
-                    idx += 1
-                except:
-                    break
-            img_frame.update_idletasks()
-            img_frame_canvas.configure(scrollregion=img_frame_canvas.bbox("all"))
-
-        load_all_images()
+                        # Click to enlarge
+                        def on_click(event, img=img):
+                            win = tk.Toplevel(detail_win)
+                            win.title("Image")
+                            imgtk = ImageTk.PhotoImage(img.resize((600,600)))
+                            lbl2 = tk.Label(win, image=imgtk)
+                            lbl2.image = imgtk
+                            lbl2.pack()
+                        lbl.bind("<Button-1>", on_click)
+                    except:
+                        return
+                thumb_pool.submit(make_image)
 
     tree.bind("<<TreeviewSelect>>", on_row_selected)
 
-    # ---------- Load Property File ----------
+    # ---------- Load File ----------
     def load_file():
         global headers, all_rows
 
-        path = filedialog.askopenfilename(
-            title="Select property file",
-            filetypes=[("CSV / TXT", "*.csv *.txt"), ("All files", "*.*")]
-        )
+        path = filedialog.askopenfilename(filetypes=[("CSV / TXT", "*.csv *.txt")])
         if not path:
             return
 
-        try:
-            with open(path, "r", encoding="utf-8-sig", errors="replace", newline="") as f:
-                sample = f.read(4096)
-                f.seek(0)
+        with open(path, encoding="utf-8", errors="replace") as f:
+            rows = list(csv.reader(f, delimiter="|"))
 
-                try:
-                    dialect = csv.Sniffer().sniff(sample, delimiters="|,\t")
-                except csv.Error:
-                    dialect = csv.excel
-                    dialect.delimiter = "|"
+        headers[:] = [h.strip() for h in rows[0]]
+        all_rows[:] = rows[1:]
 
-                reader = csv.reader(f, dialect)
-                rows = [row for row in reader if any(cell.strip() for cell in row)]
+        # Map ZIP to Town
+        zip_idx = headers.index("ZIP") if "ZIP" in headers else None
+        town_idx = headers.index("TOWN_NUM") if "TOWN_NUM" in headers else None
+        if zip_idx is not None and town_idx is not None:
+            for r in all_rows:
+                if r[zip_idx] in zip_lookup:
+                    r[town_idx] = zip_lookup[r[zip_idx]]
 
-            if not rows or len(rows) < 2:
-                messagebox.showerror(
-                    "File Error",
-                    "The selected file contains no readable rows.\n"
-                    "Check delimiter and encoding."
-                )
-                return
+        # Populate county dropdown
+        if "COUNTY" in headers:
+            counties = sorted(set(r[headers.index("COUNTY")] for r in all_rows))
+            county_dropdown["values"] = [""] + counties
+            county_dropdown.set("")
 
-            headers[:] = [h.strip() for h in rows[0]]
-            all_rows[:] = rows[1:]
+        # Populate town dropdown
+        if town_idx is not None:
+            towns = sorted(set(r[town_idx] for r in all_rows if r[town_idx]))
+            town_dropdown["values"] = [""] + towns
+            town_dropdown.set("")
 
-            # Validate required columns
-            required = {"LIST_NO", "ZIP", "COUNTY"}
-            missing = required - set(headers)
-            if missing:
-                messagebox.showerror(
-                    "Invalid File",
-                    f"Missing required columns:\n{', '.join(missing)}"
-                )
-                return
-
-            # ZIP → Town mapping
-            zip_idx = headers.index("ZIP")
-            town_idx = headers.index("TOWN_NUM") if "TOWN_NUM" in headers else None
-            if town_idx is not None:
-                for r in all_rows:
-                    if r[zip_idx] in zip_lookup:
-                        r[town_idx] = zip_lookup[r[zip_idx]]
-
-            # Populate dropdowns
-            if "COUNTY" in headers:
-                counties = sorted({r[headers.index("COUNTY")] for r in all_rows if r[headers.index("COUNTY")]})
-                county_dropdown["values"] = [""] + counties
-                county_dropdown.set("")
-
-            if town_idx is not None:
-                towns = sorted({r[town_idx] for r in all_rows if r[town_idx]})
-                town_dropdown["values"] = [""] + towns
-                town_dropdown.set("")
-
-            refresh_table(all_rows)
-
-            messagebox.showinfo(
-                "Loaded",
-                f"Loaded {len(all_rows)} rows successfully."
-            )
-
-        except Exception as e:
-            messagebox.showerror("Load Error", str(e))
-
-            refresh_table(all_rows)
+        refresh_table(all_rows)
 
     root.mainloop()
 
 # ---------- Run App ----------
-if __name__ == "__main__":
-    open_property_search_window()
+open_property_search_window()
+
